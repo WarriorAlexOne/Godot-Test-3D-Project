@@ -1,15 +1,124 @@
-[gd_scene load_steps=3 format=3 uid="uid://634qaxednqnm"]
+[gd_scene load_steps=12 format=3 uid="uid://634qaxednqnm"]
+
+[ext_resource type="Script" uid="uid://c10lj4xvspjto" path="res://CharacterBody3d.cs" id="1_a202f"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a202f"]
+size = Vector3(10, 0.1, 10)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4xowi"]
 albedo_color = Color(0.03529412, 0.38431373, 0.050980393, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_a202f"]
 material = SubResource("StandardMaterial3D_4xowi")
-size = Vector3(10, 0.01, 10)
+size = Vector3(10, 0.1, 10)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_noarx"]
+height = 1.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_a0tk4"]
+height = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_a202f"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_r3fl7"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_a202f"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_noarx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a0tk4"]
 
 [node name="Node3D" type="Node3D"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Downward Light" type="Node3D" parent="."]
+
+[node name="Shadow Light" type="DirectionalLight3D" parent="Downward Light"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+light_cull_mask = 4293918721
+shadow_enabled = true
+shadow_caster_mask = 4293918721
+
+[node name="Negative Light" type="DirectionalLight3D" parent="Downward Light"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+light_negative = true
+light_cull_mask = 4293918721
+shadow_caster_mask = 4293918721
+
+[node name="Sun Light" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.9659258, 0.22414388, -0.1294095, 0, 0.49999997, 0.86602545, 0.25881904, -0.8365163, 0.48296288, 0, 0, 0)
+layers = 2
+light_energy = 2.333
+light_cull_mask = 4293918723
+shadow_enabled = true
+shadow_opacity = 0.35
+shadow_caster_mask = 4293918722
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_a202f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+layers = 1048575
 mesh = SubResource("BoxMesh_a202f")
+skeleton = NodePath("../..")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2553463, 1.5182765, 0)
+wall_min_slide_angle = 0.0
+floor_max_angle = 0.0
+script = ExtResource("1_a202f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CylinderMesh_noarx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CylinderShape3D_a0tk4")
+
+[node name="CameraPivot" type="Node3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/CameraPivot"]
+collision_mask = 2
+
+[node name="WallLaunchDelay" type="Timer" parent="CharacterBody3D"]
+wait_time = 1.021
+one_shot = true
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6553557, 1.0486933, -0.257926)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D3"]
+layers = 2
+mesh = SubResource("CylinderMesh_a202f")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3"]
+shape = SubResource("CylinderShape3D_r3fl7")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3.595395, 2.0498064, 2.7709823)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D2"]
+layers = 2
+mesh = SubResource("CylinderMesh_a202f")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+shape = SubResource("CylinderShape3D_a202f")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0773473, 4.0060997, -2.5623136)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D4"]
+transform = Transform3D(6.652, 0, 0, 0, 8, 0, 0, 0, 0.298, 0, 0, 0)
+layers = 2
+mesh = SubResource("BoxMesh_noarx")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D4"]
+transform = Transform3D(6.652, 0, 0, 0, 8, 0, 0, 0, 0.298, 0, 0, 0)
+shape = SubResource("BoxShape3D_a0tk4")
